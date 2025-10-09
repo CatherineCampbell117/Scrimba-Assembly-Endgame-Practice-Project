@@ -23,7 +23,7 @@ main {
     align-items: center;
 }
 
-.noticeBlock {
+.gameStatus {
     margin-top: 1.5rem;
     width: 100%;
     max-width: 352px;
@@ -34,16 +34,52 @@ main {
     align-content: center;
 }
 
-.noticeBlock > h2 {
+.gameStatus > h2 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 500;
     color: #f9f4da;
 }
 
-.noticeBlock > p {
+.gameStatus > p {
     margin: 0;
     font-size: 1rem;
     font-weight: 500;
     color: #f9f4da;
+}
+
+.chipsContainer {
+    margin-top: 3rem;
+    width: 100%;
+    max-width: 350px;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.chip {
+    margin: 3px;
+    padding: 4.5px;
+    border-radius: 4px;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.chip > p,
+.letterBox > p {
+    margin: 0;
+}
+
+.wordContainer {
+    margin-top: 2rem;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    justify-content: center;
+}
+
+.letterBox {
+    margin: 4px;
+    padding: 12px;
+    border-bottom: 1px solid #f9f4da;
 }

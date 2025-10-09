@@ -5,7 +5,7 @@ export default function Chip(props) {
     };
 
     return (
-        <div style={style}>
+        <div style={style} className="chip">
             <p>{props.lang}</p>
         </div>
     );

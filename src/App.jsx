@@ -1,15 +1,24 @@
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
 import { languages } from './languages';
 import Chip from './Components/Chip';
-
-const langChips = languages.map(langObj => (
-    <Chip lang={langObj.name} bgColor={langObj.backgroundColor} textColor={langObj.color}></Chip>
-));
+import LetterBox from './Components/letterBox';
 
 export default function Hangman() {
+    const langChips = languages.map(langObj => (
+        <Chip
+            lang={langObj.name}
+            bgColor={langObj.backgroundColor}
+            textColor={langObj.color}
+        ></Chip>
+    ));
+
+    const [currentWord, setCurrenbtWord] = useState('react');
+
+    const wordLetters = currentWord
+        .split('')
+        .map((letter, index) => <LetterBox key={index} letter={letter.toUpperCase()}></LetterBox>);
+
     return (
         <>
             <main>
@@ -21,11 +30,12 @@ export default function Hangman() {
                     </p>
                 </header>
 
-                <div className="noticeBlock">
+                <section className="gameStatus">
                     <h2>You Win!</h2>
                     <p>Well done! 🎉</p>
-                </div>
-                <div className="chipsContainer">{langChips}</div>
+                </section>
+                <section className="chipsContainer">{langChips}</section>
+                <section className="wordContainer">{wordLetters}</section>
             </main>
         </>
     );
