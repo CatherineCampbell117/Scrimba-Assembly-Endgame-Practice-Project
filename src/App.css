@@ -16,3 +16,34 @@ header > p {
     font-weight: 500;
     color: #8e8e8e;
 }
+
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.noticeBlock {
+    margin-top: 1.5rem;
+    width: 100%;
+    max-width: 352px;
+    height: 59px;
+    border-radius: 4px;
+    background-color: #10a95b;
+    text-align: center;
+    align-content: center;
+}
+
+.noticeBlock > h2 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: #f9f4da;
+}
+
+.noticeBlock > p {
+    margin: 0;
+    font-size: 1rem;
+    font-weight: 500;
+    color: #f9f4da;
+}

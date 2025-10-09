@@ -2,8 +2,14 @@ import { useState } from 'react';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
+import { languages } from './languages';
+import Chip from './Components/Chip';
 
-function App() {
+const langChips = languages.map(langObj => (
+    <Chip lang={langObj.name} bgColor={langObj.backgroundColor} textColor={langObj.color}></Chip>
+));
+
+export default function Hangman() {
     return (
         <>
             <main>
@@ -14,9 +20,13 @@ function App() {
                         Assembly!
                     </p>
                 </header>
+
+                <div className="noticeBlock">
+                    <h2>You Win!</h2>
+                    <p>Well done! 🎉</p>
+                </div>
+                <div className="chipsContainer">{langChips}</div>
             </main>
         </>
     );
 }
-
-export default App;
