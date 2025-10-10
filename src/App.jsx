@@ -3,21 +3,26 @@ import './App.css';
 import { languages } from './languages';
 import Chip from './Components/Chip';
 import LetterBox from './Components/letterBox';
+import AlphLetter from './Components/AlphLetter';
 
 export default function Hangman() {
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+    const alphabetLetters = alphabet
+        .split('')
+        .map((alphLetter, index) => (
+            <AlphLetter key={index} alphLetter={alphLetter.toUpperCase()} />
+        ));
+
     const langChips = languages.map(langObj => (
-        <Chip
-            lang={langObj.name}
-            bgColor={langObj.backgroundColor}
-            textColor={langObj.color}
-        ></Chip>
+        <Chip lang={langObj.name} bgColor={langObj.backgroundColor} textColor={langObj.color} />
     ));
 
-    const [currentWord, setCurrenbtWord] = useState('react');
+    const [currentWord, setCurrentWord] = useState('react');
 
     const wordLetters = currentWord
         .split('')
-        .map((letter, index) => <LetterBox key={index} letter={letter.toUpperCase()}></LetterBox>);
+        .map((letter, index) => <LetterBox key={index} letter={letter.toUpperCase()} />);
 
     return (
         <>
@@ -36,6 +41,7 @@ export default function Hangman() {
                 </section>
                 <section className="chipsContainer">{langChips}</section>
                 <section className="wordContainer">{wordLetters}</section>
+                <section className="alphabetContainer">{alphabetLetters}</section>
             </main>
         </>
     );
