@@ -6,12 +6,23 @@ import LetterBox from './Components/letterBox';
 import AlphLetter from './Components/AlphLetter';
 
 export default function Hangman() {
+    const [guessedLetters, setGuessedLetters] = useState([]);
+
+    function LetterGuessed(letter) {
+        setGuessedLetters(prev => [...prev, letter]);
+    }
+    console.log(guessedLetters);
+
     const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
     const alphabetLetters = alphabet
         .split('')
         .map((alphLetter, index) => (
-            <AlphLetter key={index} alphLetter={alphLetter.toUpperCase()} />
+            <AlphLetter
+                key={index}
+                alphLetter={alphLetter.toUpperCase()}
+                onLetterClick={LetterGuessed}
+            />
         ));
 
     const langChips = languages.map(langObj => (
