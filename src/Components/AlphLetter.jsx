@@ -1,7 +1,16 @@
 export default function AlphLetter(props) {
+    let backgroundColor = '#FCBA29';
+
+    if (props.isCorrect) {
+        backgroundColor = '#10A95B';
+    } else if (props.isIncorrect) {
+        backgroundColor = '#EC5D49';
+    }
+
     const style = {
-        backgroundColor: '#FCBA29',
-        color: '#1E1E1E'
+        backgroundColor,
+        color: '#1E1E1E',
+        cursor: props.isCorrect || props.isIncorrect ? 'default' : 'pointer'
     };
 
     return (
