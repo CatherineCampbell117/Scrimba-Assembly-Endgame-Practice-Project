@@ -6,39 +6,40 @@ import LetterBox from './Components/letterBox';
 import AlphLetter from './Components/AlphLetter';
 
 export default function Hangman() {
-    const [guessedLetters, setGuessedLetters] = useState([]);
-    const [correctGuesses, setCorrectGuesses] = useState([]);
-    const [incorrectGuesses, setIncorrectGuesses] = useState([]);
+    const [currentWord, setCurrentWord] = useState('react');
+    const [GuessedLetters, setGuessedLetters] = useState([]);
 
-    function LetterGuessed(letter) {
-        if (currentWord.toUpperCase().includes(letter)) {
-            setGuessedLetters(prevLetters =>
-                prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
-            );
-        }
+    const wrongGuessCount = GuessedLetters.filter(
+        letter => !currentWord.toUpperCase().includes(letter)
+    ).length;
 
-        if (currentWord.toUpperCase().includes(letter)) {
-            setCorrectGuesses(prevLetters =>
-                prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
-            );
-        } else {
-            setIncorrectGuesses(prevLetters =>
-                prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
-            );
-        }
-    }
-
-    console.log(guessedLetters);
-    console.log(correctGuesses);
-    console.log(incorrectGuesses);
+    console.log(wrongGuessCount);
 
     const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
-    const alphabetLetters = alphabet.split('').map((alphLetter, index) => {
-        const isGuessed = guessedLetters.includes(alphLetter.toUpperCase());
-        const isCorrect = correctGuesses.includes(alphLetter.toUpperCase());
-        const isIncorrect = incorrectGuesses.includes(alphLetter.toUpperCase());
+    function LetterGuessed(letter) {
+        setGuessedLetters(prevLetters =>
+            prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
+        );
+    }
 
+    console.log(GuessedLetters);
+
+    const langChips = languages.map(langObj => (
+        <Chip lang={langObj.name} bgColor={langObj.backgroundColor} textColor={langObj.color} />
+    ));
+
+    const wordLetters = currentWord.split('').map((letter, index) => {
+        const upperLetter = letter.toUpperCase();
+        const isRevealed = GuessedLetters.includes(upperLetter);
+        return <LetterBox key={index} letter={upperLetter} CorrectGuess={isRevealed} />;
+    });
+
+    const alphabetLetters = alphabet.split('').map((alphLetter, index) => {
+        const upperLetter = alphLetter.toUpperCase();
+        const isGuessed = GuessedLetters.includes(upperLetter);
+        const isCorrect = isGuessed && currentWord.toUpperCase().includes(upperLetter);
+        const isIncorrect = isGuessed && !currentWord.toUpperCase().includes(upperLetter);
         return (
             <AlphLetter
                 isGuessed={isGuessed}
@@ -50,16 +51,6 @@ export default function Hangman() {
             />
         );
     });
-
-    const langChips = languages.map(langObj => (
-        <Chip lang={langObj.name} bgColor={langObj.backgroundColor} textColor={langObj.color} />
-    ));
-
-    const [currentWord, setCurrentWord] = useState('react');
-
-    const wordLetters = currentWord
-        .split('')
-        .map((letter, index) => <LetterBox key={index} letter={letter.toUpperCase()} />);
 
     return (
         <>

@@ -6,7 +6,7 @@ export default function LetterBox(props) {
 
     return (
         <span style={style} className="letterBox">
-            <p>{props.letter}</p>
+            <p className={props.CorrectGuess ? '' : 'letterHidden'}>{props.letter}</p>
         </span>
     );
 }

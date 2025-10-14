@@ -70,6 +70,20 @@ main {
     margin: 0;
 }
 
+.chip.lost::before {
+    content: '💀';
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    font-size: 0.85rem;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+}
+
 .wordContainer {
     margin-top: 2rem;
     width: 100%;
@@ -79,9 +93,15 @@ main {
 }
 
 .letterBox {
-    margin: 4px;
+    margin: 2px;
     padding: 12px;
+    width: 40px;
+    height: 40px;
     border-bottom: 1px solid #f9f4da;
+}
+
+.letterHidden {
+    visibility: hidden;
 }
 
 .alphabetContainer {
