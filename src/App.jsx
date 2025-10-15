@@ -6,6 +6,7 @@ import LetterBox from './Components/letterBox';
 import AlphLetter from './Components/AlphLetter';
 
 export default function Hangman() {
+    // State values
     const [currentWord, setCurrentWord] = useState('react');
     const [GuessedLetters, setGuessedLetters] = useState([]);
 
