@@ -9,13 +9,35 @@ export default function Hangman() {
     const [currentWord, setCurrentWord] = useState('react');
     const [GuessedLetters, setGuessedLetters] = useState([]);
 
-    const wrongGuessCount = GuessedLetters.filter(
+    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+
+    let wrongGuessCount = GuessedLetters.filter(
         letter => !currentWord.toUpperCase().includes(letter)
     ).length;
 
-    console.log(wrongGuessCount);
+    const langChips = languages.map((langObj, index) => {
+        const addLost = index < wrongGuessCount;
+        return (
+            <Chip
+                key={index}
+                lang={langObj.name}
+                bgColor={langObj.backgroundColor}
+                textColor={langObj.color}
+                addLostClass={addLost}
+            />
+        );
+    });
 
-    const alphabet = 'abcdefghijklmnopqrstuvwxyz';
+    const isGameWon = currentWord
+        .toUpperCase()
+        .split('')
+        .every(letter => GuessedLetters.includes(letter));
+    const isGameLost = wrongGuessCount >= languages.length - 1;
+    const isGameOver = isGameWon || isGameLost;
+
+    console.log(`Wrong Guesses: ${wrongGuessCount}`);
+    console.log(`Game Lost: ${isGameLost}`);
+    console.log(`Game Over: ${isGameOver}`);
 
     function LetterGuessed(letter) {
         setGuessedLetters(prevLetters =>
@@ -24,10 +46,6 @@ export default function Hangman() {
     }
 
     console.log(GuessedLetters);
-
-    const langChips = languages.map(langObj => (
-        <Chip lang={langObj.name} bgColor={langObj.backgroundColor} textColor={langObj.color} />
-    ));
 
     const wordLetters = currentWord.split('').map((letter, index) => {
         const upperLetter = letter.toUpperCase();
@@ -52,6 +70,16 @@ export default function Hangman() {
         );
     });
 
+    function classList() {
+        if (isGameWon) {
+            return 'gameStatus won';
+        } else if (isGameLost) {
+            return 'gameStatus lost';
+        } else {
+            return 'gameStatus';
+        }
+    }
+
     return (
         <>
             <main>
@@ -63,14 +91,20 @@ export default function Hangman() {
                     </p>
                 </header>
 
-                <section className="gameStatus">
-                    <h2>You Win!</h2>
-                    <p>Well done! 🎉</p>
+                <section className={classList()}>
+                    <h2>{isGameWon ? 'You Win!' : '' || isGameLost ? 'Game over!' : ''}</h2>
+                    <p>
+                        {isGameWon
+                            ? 'Well done!🎉'
+                            : '' || isGameLost
+                            ? 'You lose! Better start learning Assembly 😭'
+                            : ''}
+                    </p>
                 </section>
                 <section className="chipsContainer">{langChips}</section>
                 <section className="wordContainer">{wordLetters}</section>
                 <section className="alphabetContainer">{alphabetLetters}</section>
-                <button className="new-game">New Game</button>
+                {isGameOver && <button className="new-game">New Game</button>}
             </main>
         </>
     );

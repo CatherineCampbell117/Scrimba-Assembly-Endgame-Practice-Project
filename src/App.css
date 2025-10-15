@@ -23,15 +23,24 @@ main {
     align-items: center;
 }
 
-.gameStatus {
+section.gameStatus {
     margin-top: 1.5rem;
+    padding: 6px 0;
     width: 100%;
     max-width: 352px;
     height: 59px;
     border-radius: 4px;
-    background-color: #10a95b;
+    background-color: #282726;
     text-align: center;
     align-content: center;
+}
+
+section.won {
+    background-color: #10a95b;
+}
+
+section.lost {
+    background-color: #ba2a2a;
 }
 
 .gameStatus > h2 {
@@ -58,6 +67,7 @@ main {
 }
 
 .chip {
+    position: relative;
     margin: 3px;
     padding: 4.5px;
     border-radius: 4px;
@@ -70,7 +80,7 @@ main {
     margin: 0;
 }
 
-.chip.lost::before {
+div.chip.lost::before {
     content: '💀';
     position: absolute;
     display: flex;
