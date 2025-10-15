@@ -10,12 +10,66 @@ export default function Hangman() {
     const [currentWord, setCurrentWord] = useState('react');
     const [GuessedLetters, setGuessedLetters] = useState([]);
 
+    // Static values
     const alphabet = 'abcdefghijklmnopqrstuvwxyz';
 
+    // Derived values
     let wrongGuessCount = GuessedLetters.filter(
         letter => !currentWord.toUpperCase().includes(letter)
     ).length;
 
+    /**
+     * Determines if the game is won by checking if every letter in the current word
+     * has been guessed.
+     * Determines if the game is lost by comparing the number of wrong guesses
+     * to the total number of language chips.
+     * `isGameOver` is true if either win or loss condition is met.
+     */
+    const isGameWon = currentWord
+        .toUpperCase()
+        .split('')
+        .every(letter => GuessedLetters.includes(letter));
+    const isGameLost = wrongGuessCount >= languages.length - 1;
+    const isGameOver = isGameWon || isGameLost;
+
+    console.log(`Wrong Guesses: ${wrongGuessCount}`);
+    console.log(`Game Lost: ${isGameLost}`);
+    console.log(`Game Over: ${isGameOver}`);
+
+    // Functions
+    /**
+     * Adds a guessed letter to the list of previously guessed letters,
+     * only if it hasn't been guessed already
+     * @param {string} letter - The letter that the user has guessed.
+     */
+    function LetterGuessed(letter) {
+        setGuessedLetters(prevLetters =>
+            prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
+        );
+    }
+
+    /**
+     * Returns the appropriate class name for the game status section
+     * based on whether the game is won, lost, or still in progress.
+     */
+    function classList() {
+        if (isGameWon) {
+            return 'gameStatus won';
+        } else if (isGameLost) {
+            return 'gameStatus lost';
+        } else {
+            return 'gameStatus';
+        }
+    }
+
+    // Components mapping
+    /**
+     * Maps over each language object from the imported `languages` array.
+     * For each language, determines whether it should be marked as "lost"
+     * based on the number of wrong guesses.
+     * Returns a Chip component with relevant props including name, background color,
+     * text color, and a flag to conditionally apply the "lost" class.
+     */
     const langChips = languages.map((langObj, index) => {
         const addLost = index < wrongGuessCount;
         return (
@@ -29,31 +83,26 @@ export default function Hangman() {
         );
     });
 
-    const isGameWon = currentWord
-        .toUpperCase()
-        .split('')
-        .every(letter => GuessedLetters.includes(letter));
-    const isGameLost = wrongGuessCount >= languages.length - 1;
-    const isGameOver = isGameWon || isGameLost;
-
-    console.log(`Wrong Guesses: ${wrongGuessCount}`);
-    console.log(`Game Lost: ${isGameLost}`);
-    console.log(`Game Over: ${isGameOver}`);
-
-    function LetterGuessed(letter) {
-        setGuessedLetters(prevLetters =>
-            prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
-        );
-    }
-
     console.log(GuessedLetters);
 
+    /**
+     * Splits the current word into individual letters and maps over them.
+     * Converts each letter to uppercase and checks if it has been guessed.
+     * Returns a LetterBox component for each letter, with a flag indicating
+     * whether it should be revealed.
+     */
     const wordLetters = currentWord.split('').map((letter, index) => {
         const upperLetter = letter.toUpperCase();
         const isRevealed = GuessedLetters.includes(upperLetter);
         return <LetterBox key={index} letter={upperLetter} CorrectGuess={isRevealed} />;
     });
 
+    /**
+     * Maps over each letter in the alphabet.
+     * Converts each letter to uppercase and checks if it has been guessed.
+     * Determines whether the guessed letter is correct or incorrect.
+     * Returns an AlphLetter component with props reflecting its guessed status.
+     */
     const alphabetLetters = alphabet.split('').map((alphLetter, index) => {
         const upperLetter = alphLetter.toUpperCase();
         const isGuessed = GuessedLetters.includes(upperLetter);
@@ -71,15 +120,7 @@ export default function Hangman() {
         );
     });
 
-    function classList() {
-        if (isGameWon) {
-            return 'gameStatus won';
-        } else if (isGameLost) {
-            return 'gameStatus lost';
-        } else {
-            return 'gameStatus';
-        }
-    }
+    //JSX return
 
     return (
         <>
@@ -91,7 +132,7 @@ export default function Hangman() {
                         Assembly!
                     </p>
                 </header>
-
+                {/* Runs classList to determine appropriate styling for game status */}
                 <section className={classList()}>
                     <h2>{isGameWon ? 'You Win!' : '' || isGameLost ? 'Game over!' : ''}</h2>
                     <p>
@@ -105,6 +146,7 @@ export default function Hangman() {
                 <section className="chipsContainer">{langChips}</section>
                 <section className="wordContainer">{wordLetters}</section>
                 <section className="alphabetContainer">{alphabetLetters}</section>
+                {/* Conditionally renders the "New Game" button if the game is over */}
                 {isGameOver && <button className="new-game">New Game</button>}
             </main>
         </>
