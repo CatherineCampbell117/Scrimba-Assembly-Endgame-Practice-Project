@@ -43,6 +43,13 @@ section.lost {
     background-color: #ba2a2a;
 }
 
+section.wrong {
+    background-color: #7a5ea7;
+    border: 1px dashed #323232;
+    font-style: italic;
+    font-weight: 400;
+}
+
 .gameStatus > h2 {
     margin: 0;
     font-size: 1.25rem;
@@ -136,6 +143,11 @@ div.chip.lost::before {
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+
+.alphLetterBox > button:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 button.new-game {

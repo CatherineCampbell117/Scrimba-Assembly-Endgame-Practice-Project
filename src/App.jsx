@@ -4,11 +4,13 @@ import { languages } from './languages';
 import Chip from './Components/Chip';
 import LetterBox from './Components/letterBox';
 import AlphLetter from './Components/AlphLetter';
+import { getFarewellText } from './utils';
 
 export default function Hangman() {
     // State values
     const [currentWord, setCurrentWord] = useState('react');
     const [GuessedLetters, setGuessedLetters] = useState([]);
+    const [currentGuess, setCurrentGuess] = useState('');
 
     // Static values
     const alphabet = 'abcdefghijklmnopqrstuvwxyz';
@@ -31,10 +33,8 @@ export default function Hangman() {
         .every(letter => GuessedLetters.includes(letter));
     const isGameLost = wrongGuessCount >= languages.length - 1;
     const isGameOver = isGameWon || isGameLost;
-
-    console.log(`Wrong Guesses: ${wrongGuessCount}`);
-    console.log(`Game Lost: ${isGameLost}`);
-    console.log(`Game Over: ${isGameOver}`);
+    const isWrongGuess = currentGuess && !currentWord.toUpperCase().includes(currentGuess);
+    const recentlyLostLanguage = wrongGuessCount > 0 ? languages[wrongGuessCount - 1]?.name : null;
 
     // Functions
     /**
@@ -46,21 +46,30 @@ export default function Hangman() {
         setGuessedLetters(prevLetters =>
             prevLetters.includes(letter) ? prevLetters : [...prevLetters, letter]
         );
+        setCurrentGuess(letter);
     }
 
     /**
      * Returns the appropriate class name for the game status section
      * based on whether the game is won, lost, or still in progress.
      */
+
     function classList() {
         if (isGameWon) {
             return 'gameStatus won';
         } else if (isGameLost) {
             return 'gameStatus lost';
+        } else if (isWrongGuess) {
+            return 'gameStatus wrong';
         } else {
             return 'gameStatus';
         }
     }
+
+    console.log(`Wrong Guesses: ${wrongGuessCount}`);
+    console.log(`Game Lost: ${isGameLost}`);
+    console.log(`Game Over: ${isGameOver}`);
+    console.log(`Wrong Guess: ${isWrongGuess}`);
 
     // Components mapping
     /**
@@ -116,6 +125,7 @@ export default function Hangman() {
                 key={index}
                 alphLetter={alphLetter.toUpperCase()}
                 onLetterClick={LetterGuessed}
+                disabled={isGameOver}
             />
         );
     });
@@ -134,7 +144,15 @@ export default function Hangman() {
                 </header>
                 {/* Runs classList to determine appropriate styling for game status */}
                 <section className={classList()}>
-                    <h2>{isGameWon ? 'You Win!' : '' || isGameLost ? 'Game over!' : ''}</h2>
+                    <h2>
+                        {isGameWon
+                            ? 'You Win!'
+                            : '' || isGameLost
+                            ? 'Game over!'
+                            : '' || isWrongGuess
+                            ? getFarewellText(recentlyLostLanguage) + '🫡'
+                            : ''}
+                    </h2>
                     <p>
                         {isGameWon
                             ? 'Well done!🎉'

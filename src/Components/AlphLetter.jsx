@@ -7,14 +7,24 @@ export default function AlphLetter(props) {
         backgroundColor = '#EC5D49';
     }
 
+    let opacity = 100;
+    let cursor = props.isCorrect || props.isIncorrect ? 'default' : 'pointer';
+
+    if (props.disabled) {
+        opacity = 0.5;
+        cursor = 'not-allowed';
+    }
+
     const style = {
         backgroundColor,
         color: '#1E1E1E',
-        cursor: props.isCorrect || props.isIncorrect ? 'default' : 'pointer'
+        opacity,
+        cursor
     };
 
     return (
         <button
+            disabled={props.disabled}
             style={style}
             className="alphLetterBox"
             // Adding empty function tells React do nothing until the button is clicked.
