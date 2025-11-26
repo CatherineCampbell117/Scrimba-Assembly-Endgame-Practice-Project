@@ -4,9 +4,19 @@ export default function LetterBox(props) {
         color: '#F9F4DA'
     };
 
+    function classList() {
+        if (props.RevealLetter) {
+            return 'letterRevealed';
+        } else if (props.CorrectGuess) {
+            return '';
+        } else {
+            return 'letterHidden';
+        }
+    }
+
     return (
         <span style={style} className="letterBox">
-            <p className={props.CorrectGuess ? '' : 'letterHidden'}>{props.letter}</p>
+            <p className={classList()}>{props.letter}</p>
         </span>
     );
 }

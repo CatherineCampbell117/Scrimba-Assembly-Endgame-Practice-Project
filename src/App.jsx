@@ -5,10 +5,11 @@ import Chip from './Components/Chip';
 import LetterBox from './Components/letterBox';
 import AlphLetter from './Components/AlphLetter';
 import { getFarewellText } from './utils';
+import { getWord } from './utils';
 
 export default function Hangman() {
     // State values
-    const [currentWord, setCurrentWord] = useState('react');
+    const [currentWord, setCurrentWord] = useState(() => getWord());
     const [GuessedLetters, setGuessedLetters] = useState([]);
     const [currentGuess, setCurrentGuess] = useState('');
 
@@ -35,6 +36,7 @@ export default function Hangman() {
     const isGameOver = isGameWon || isGameLost;
     const isWrongGuess = currentGuess && !currentWord.toUpperCase().includes(currentGuess);
     const recentlyLostLanguage = wrongGuessCount > 0 ? languages[wrongGuessCount - 1]?.name : null;
+    const guessesLeft = languages.length - 1 - wrongGuessCount;
 
     // Functions
     /**
@@ -103,7 +105,15 @@ export default function Hangman() {
     const wordLetters = currentWord.split('').map((letter, index) => {
         const upperLetter = letter.toUpperCase();
         const isRevealed = GuessedLetters.includes(upperLetter);
-        return <LetterBox key={index} letter={upperLetter} CorrectGuess={isRevealed} />;
+        const revealUnguessedLetter = isGameLost && !GuessedLetters.includes(upperLetter);
+        return (
+            <LetterBox
+                key={index}
+                letter={upperLetter}
+                CorrectGuess={isRevealed}
+                RevealLetter={revealUnguessedLetter}
+            />
+        );
     });
 
     /**
@@ -126,9 +136,17 @@ export default function Hangman() {
                 alphLetter={alphLetter.toUpperCase()}
                 onLetterClick={LetterGuessed}
                 disabled={isGameOver}
+                // ariaDisabled={GuessedLetters.includes(letter)}
+                // ariaLabel={`letter ${letter}`}
             />
         );
     });
+
+    function ResetGame() {
+        setCurrentWord(getWord());
+        setGuessedLetters([]);
+        setCurrentGuess('');
+    }
 
     //JSX return
 
@@ -143,7 +161,7 @@ export default function Hangman() {
                     </p>
                 </header>
                 {/* Runs classList to determine appropriate styling for game status */}
-                <section className={classList()}>
+                <section className={classList()} aria-live="polite" role="status">
                     <h2>
                         {isGameWon
                             ? 'You Win!'
@@ -163,9 +181,30 @@ export default function Hangman() {
                 </section>
                 <section className="chipsContainer">{langChips}</section>
                 <section className="wordContainer">{wordLetters}</section>
+                <section className="sr-only" aria-live="polite" role="status">
+                    <p>
+                        {currentWord.includes(currentGuess)
+                            ? `Correct! The letter ${currentGuess} is in the word.`
+                            : `Sorry, the letter ${currentGuess} is not in the word.`}
+                        You have {guessesLeft} attempts left.
+                    </p>
+                    <p>
+                        Current word:
+                        {currentWord
+                            .split('')
+                            .map(letter =>
+                                GuessedLetters.includes(letter) ? letter + '.' : 'blank.'
+                            )
+                            .join(' ')}
+                    </p>
+                </section>
                 <section className="alphabetContainer">{alphabetLetters}</section>
                 {/* Conditionally renders the "New Game" button if the game is over */}
-                {isGameOver && <button className="new-game">New Game</button>}
+                {isGameOver && (
+                    <button onClick={ResetGame} className="new-game">
+                        New Game
+                    </button>
+                )}
             </main>
         </>
     );
